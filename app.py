@@ -35,9 +35,12 @@ auth_query_parameters = {
     "client_id": CLIENT_ID
 }
 
-
 @app.route("/")
 def index():
+    return render_template("index.html")
+
+@app.route("/authenticate")
+def authenticate():
     # Auth Step 1: Authorization
     url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
@@ -79,7 +82,11 @@ def callback():
 
     # Combine profile and playlist data to display
     display_arr = [profile_data] + playlist_data["items"]
-    return render_template("index.html", sorted_array=display_arr)
+    return render_template("room.html", sorted_array=display_arr)
+
+@app.route("/join")
+def join():
+    return render_template("join.html")
 
 
 if __name__ == "__main__":
