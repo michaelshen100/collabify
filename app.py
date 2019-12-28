@@ -103,6 +103,9 @@ def callback():
     # Combine profile and playlist data to display
     display_arr = [profile_data] + playlist_data["items"]
 
+    rc = room_code()
+    while rc in room_directory:
+        rc = room_code()
 
     # Creating auth header for creating a playlist
     create_playlist_header={"Authorization" : "Bearer {}".format(access_token),
@@ -112,6 +115,11 @@ def callback():
     create_playlist_url = "https://api.spotify.com/v1/users/" + profile_data["id"] + "/playlists"
     create_playlist_response = requests.post(create_playlist_url, headers=create_playlist_header, json={"name":"Collabify"})
     created_playlist_data = json.loads(create_playlist_response.text)
+
+    room_directory[rc] = {
+        "Access Token" : access_token,
+        "Playlist ID" : created_playlist_data["id"]
+    }
 
     return render_template("room.html", sorted_array=display_arr)
 
