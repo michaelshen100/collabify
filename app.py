@@ -20,7 +20,7 @@ SPOTIFY_API_URL = "{}/{}".format(SPOTIFY_API_BASE_URL, API_VERSION)
 
 # Server-side Parameters
 CLIENT_SIDE_URL = "http://127.0.0.1"
-PORT = 8080
+PORT = 5000
 REDIRECT_URI = "{}:{}/callback/q".format(CLIENT_SIDE_URL, PORT)
 SCOPE = "playlist-modify-public playlist-modify-private"
 STATE = ""
@@ -118,6 +118,12 @@ def callback():
 @app.route("/join")
 def join():
     return render_template("join.html")
+
+@app.route("/search", methods=['GET', 'POST'])
+def search():
+    if request.method == "POST":
+        song_name = request.form["search"]
+        return song_name
 
 
 if __name__ == "__main__":
