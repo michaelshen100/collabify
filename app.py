@@ -3,6 +3,7 @@ from flask import Flask, request, redirect, g, render_template
 import requests
 from urllib.parse import quote
 from credentials import CLIENT_ID, CLIENT_SECRET
+import uuid
 
 # Authentication Steps, paramaters, and responses are defined at https://developer.spotify.com/web-api/authorization-guide/
 # Visit this url to see all the steps, parameters, and expected response.
@@ -35,6 +36,26 @@ auth_query_parameters = {
     "client_id": CLIENT_ID
 }
 
+room_directory = dict()
+
+# Function to generate room code off of a portion of random UUID string
+def room_code():
+    id = uuid.uuid4()
+    return str(id)[24:30]
+
+# Function to add song to a playlist given the playlist's ID, the song's URI, and the authorization token
+def add_song(playlist_ID, song_uri, add_song_header):
+    add_url = "https://api.spotify.com/v1/playlists/" + playlist_ID + "/tracks"
+    add_response = requests.post(add_url, headers=add_song_header, json={"uris" : [song_uri]})
+    add_data = json.loads(add_response.text)
+
+# Function to search for songs given a query; NOTE: query for endpoint needs to be passed in formatted form --> convert from plain-text recieved from front-end
+def search(query, search_header):
+    search_url = "https://api.spotify.com/v1/search?q=" + query
+    search_response = requests.get(search_url, headers=search_header)
+    search_data = json.loads(search_response.text)
+    return search_data
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -45,7 +66,6 @@ def authenticate():
     url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
     auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
     return redirect(auth_url)
-
 
 @app.route("/callback/q")
 def callback():
@@ -82,6 +102,17 @@ def callback():
 
     # Combine profile and playlist data to display
     display_arr = [profile_data] + playlist_data["items"]
+
+
+    # Creating auth header for creating a playlist
+    create_playlist_header={"Authorization" : "Bearer {}".format(access_token),
+                            "Content-Type"  :  "application/json"}
+
+    # Creating a playlist for the user
+    create_playlist_url = "https://api.spotify.com/v1/users/" + profile_data["id"] + "/playlists"
+    create_playlist_response = requests.post(create_playlist_url, headers=create_playlist_header, json={"name":"Collabify"})
+    created_playlist_data = json.loads(create_playlist_response.text)
+
     return render_template("room.html", sorted_array=display_arr)
 
 @app.route("/join")
