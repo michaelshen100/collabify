@@ -41,7 +41,7 @@ room_directory = dict()
 # Function to generate room code off of a portion of random UUID string
 def room_code():
     id = uuid.uuid4()
-    return str(id)[24:30]
+    return str(id)[24:29]
 
 # Function to add song to a playlist given the playlist's ID, the song's URI, and the authorization token
 def add_song(playlist_ID, song_uri, add_song_header):
@@ -121,17 +121,17 @@ def callback():
         "Playlist ID" : created_playlist_data["id"]
     }
 
-    return render_template("room.html", sorted_array=display_arr)
+    return render_template("room.html", room_code=rc)
 
 @app.route("/join")
 def join():
     return render_template("join.html")
 
-@app.route("/search", methods=['GET', 'POST'])
-def search():
+@app.route("/search/<rc>", methods=['GET', 'POST'])
+def search(rc):
     if request.method == "POST":
         song_name = request.form["search"]
-        return song_name
+        return rc
 
 
 if __name__ == "__main__":

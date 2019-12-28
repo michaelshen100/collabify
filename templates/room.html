@@ -8,8 +8,8 @@
     <body>
         <div class="container h-100">
                   <div class="col-12 text-center">
-                    <div class="display-5"><p>Room Code: </p></div>
-                    <form action="/search" method="post">
+                    <div class="display-5"><p>Room Code: {{room_code}}</p></div>
+                    <form action="{{ '/search/' + room_code }}" method="post">
                         <div class="form-group">
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" placeholder="Enter Song Name" aria-describedby="button-addon2" name="search" required/>
@@ -18,16 +18,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- <input type="text" placeholder="Search for your idea" name="user_search" required/>
-                        <button type="submit">Search</button> -->
                     </form>
-                    <!-- <div class="input-group mb-3" action="/">
-                        <input type="text" class="form-control" placeholder="Song Name" name="song_name" aria-describedby="button-addon2">
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-                        </div>
-                      </div> -->
                     </div>  
     </body>
 </html>

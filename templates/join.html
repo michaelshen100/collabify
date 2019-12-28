@@ -10,12 +10,16 @@
                 <div class="row h-100 justify-content-center align-items-center">
                   <div class="col-3 text-center">
                     <div class="display-4"><p>Find Room</p></div>
-                    <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Enter Room Code" aria-label="Room code" aria-describedby="button-addon2">
-                            <div class="input-group-append">
-                              <button class="btn btn-outline-secondary" type="button" id="button-addon2">Find</button>
-                            </div>
+                    <form action="/search" method="post">
+                      <div class="form-group">
+                          <div class="input-group mb-3">
+                              <input type="text" class="form-control" placeholder="Enter Song Name" aria-describedby="button-addon2" name="search" required/>
+                              <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+                              </div>
                           </div>
+                      </div>
+                  </form>
                   </div>  
                 </div>
     </body>
