@@ -137,6 +137,15 @@ def search(rc):
         return search_results
 
 
+@app.route("/find_room", methods=['GET', 'POST'])
+def find_room():
+    if request.method == "POST":
+        rc = request.form["rc"]
+        if rc in room_directory:
+            return render_template("room.html", room_code=rc)
+        else:
+            return render_template("not_found.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
