@@ -38,6 +38,12 @@ auth_query_parameters = {
 
 room_directory = dict()
 
+def get_devices(rc):
+    devices_url = "https://api.spotify.com/v1/me/player/devices"
+    devices_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
+    devices_response = requests.get(devices_url, headers=devices_auth_header)
+    devices_data = json.loads(devices_response.text)
+
 # Function to generate room code off of a portion of random UUID string
 def room_code():
     id = uuid.uuid4()
