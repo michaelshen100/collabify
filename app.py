@@ -38,6 +38,14 @@ auth_query_parameters = {
 
 room_directory = dict()
 
+# Function to display the queue (Collabify Playlist)
+def display_playlist(rc):
+    display_url = "https://api.spotify.com/v1/playlists/{playlist_id}/tracks".format(room_directory[rc]["Playlist ID"])
+    display_auth_header =  {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
+    display_response = requests.get(display_url, headers=display_auth_header)
+    display_data = json.loads(display_response.text)
+    return display_data
+
 # Function to start playback on a given device
 def select_device(rc, device_id):
     device_url = "https://api.spotify.com/v1/me/player"
