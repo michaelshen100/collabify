@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Room</title>
+        <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+            <p></p>
+            <div class="col-12 text-center">
+                <form action="{{ '/search/' + sd['Room Code'] }}" method="post">
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Enter Song Name" aria-describedby="button-addon2" name="search" required/>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% for entry in sd["Search Results"]["tracks"]["items"] %}
+            <div class="row">
+                <div class="col-2">
+                    <img class="img-fluid" src="{{ entry['album']['images'][0]['url'] }}"/>
+                </div>
+                <div class="col-10">
+                    <h2>{{ entry['name'] }}</h2>
+                    <p>
+                    {% for artist in entry['artists'] %}
+                    {{ artist['name'] }}
+                    {% endfor %}
+                    - {{ entry['album']['name']}}
+                    </p>
+                    <h3></h3>
+                </div>
+            </div>
+            <p></p>
+            {% endfor %}
+    </body>
+</html>

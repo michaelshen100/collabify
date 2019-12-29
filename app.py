@@ -134,7 +134,11 @@ def search(rc):
         song_name = request.form["search"]
         song_query = song_name.replace(" ", "%20") + "&type=track"
         search_results = search_fr(song_query, search_auth_header)
-        return search_results
+        search_dict = {
+            "Room Code" : rc,
+            "Search Results" : search_results
+        }
+        return render_template("search_results.html",  sd = search_dict)
 
 
 @app.route("/find_room", methods=['GET', 'POST'])
