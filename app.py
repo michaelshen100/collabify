@@ -38,6 +38,14 @@ auth_query_parameters = {
 
 room_directory = dict()
 
+# Function to start playback on a given device
+def select_device(rc, device_id):
+    device_url = "https://api.spotify.com/v1/me/player"
+    device_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
+    device_response = requests.put(device_url, headers=device_auth_header, json={"device_ids" : [device_id], "play" : True})
+    device_data = json.loads(device_response.text)
+
+# Function to retrieve a list of the user's available devices
 def get_devices(rc):
     devices_url = "https://api.spotify.com/v1/me/player/devices"
     devices_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
@@ -50,7 +58,10 @@ def room_code():
     return str(id)[24:29]
 
 # Function to add song to a playlist given the playlist's ID, the song's URI, and the authorization token
-def add_song(playlist_ID, song_uri, add_song_header):
+def add(rc, song_uri):
+    playlist_ID = room_directory[rc]["Playlist ID"]
+    add_song_header = {"Authorization" : "Bearer {}".format(room_directory[rc]["Access Token"]),
+                        "Content-Type"  :  "application/json"}
     add_url = "https://api.spotify.com/v1/playlists/" + playlist_ID + "/tracks"
     add_response = requests.post(add_url, headers=add_song_header, json={"uris" : [song_uri]})
     add_data = json.loads(add_response.text)
@@ -158,7 +169,8 @@ def find_room():
 
 @app.route("/add/<rc>/<uri>")
 def add_song(rc, uri):
-    return uri
+    add(rc, uri)
+    return
 
 
 if __name__ == "__main__":
