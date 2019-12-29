@@ -59,6 +59,7 @@ def get_devices(rc):
     devices_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
     devices_response = requests.get(devices_url, headers=devices_auth_header)
     devices_data = json.loads(devices_response.text)
+    return devices_data
 
 # Function to generate room code off of a portion of random UUID string
 def room_code():
