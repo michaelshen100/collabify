@@ -150,6 +150,10 @@ def find_room():
         else:
             return render_template("not_found.html")
 
+@app.route("/add/<rc>/<uri>")
+def add_song(rc, uri):
+    return uri
+
 
 if __name__ == "__main__":
     app.run(debug=True)
