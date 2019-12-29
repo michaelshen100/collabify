@@ -40,7 +40,7 @@ room_directory = dict()
 
 # Function to display the queue (Collabify Playlist)
 def display_playlist(rc):
-    display_url = "https://api.spotify.com/v1/playlists/{playlist_id}/tracks".format(room_directory[rc]["Playlist ID"])
+    display_url = "https://api.spotify.com/v1/playlists/{}/tracks".format(room_directory[rc]["Playlist ID"])
     display_auth_header =  {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
     display_response = requests.get(display_url, headers=display_auth_header)
     display_data = json.loads(display_response.text)
@@ -80,6 +80,13 @@ def search_fr(query, search_header):
     search_response = requests.get(search_url, headers=search_header)
     search_data = json.loads(search_response.text)
     return search_data
+
+def room_args(rc, display_playlist):
+    search_dict = {
+        "Room Code" : rc,
+        "Playlist Items" : display_playlist
+    }
+    return search_dict
 
 @app.route("/")
 def index():
@@ -145,8 +152,7 @@ def callback():
         "Access Token" : access_token,
         "Playlist ID" : created_playlist_data["id"]
     }
-
-    return render_template("room.html", room_code=rc)
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 @app.route("/join")
 def join():
@@ -171,14 +177,15 @@ def find_room():
     if request.method == "POST":
         rc = request.form["rc"]
         if rc in room_directory:
-            return render_template("room.html", room_code=rc)
+            return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
         else:
             return render_template("not_found.html")
 
 @app.route("/add/<rc>/<uri>")
 def add_song(rc, uri):
     add(rc, uri)
-    return
+    
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 
 if __name__ == "__main__":
