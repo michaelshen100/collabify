@@ -50,7 +50,7 @@ def add_song(playlist_ID, song_uri, add_song_header):
     add_data = json.loads(add_response.text)
 
 # Function to search for songs given a query; NOTE: query for endpoint needs to be passed in formatted form --> convert from plain-text recieved from front-end
-def search(query, search_header):
+def search_fr(query, search_header):
     search_url = "https://api.spotify.com/v1/search?q=" + query
     search_response = requests.get(search_url, headers=search_header)
     search_data = json.loads(search_response.text)
@@ -130,8 +130,12 @@ def join():
 @app.route("/search/<rc>", methods=['GET', 'POST'])
 def search(rc):
     if request.method == "POST":
+        search_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
         song_name = request.form["search"]
-        return rc
+        song_query = song_name.replace(" ", "%20") + "&type=track"
+        search_results = search_fr(song_query, search_auth_header)
+        return search_results
+
 
 
 if __name__ == "__main__":
