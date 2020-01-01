@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Select Playback Device</title>
+        <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container">
+              <div class="col-12 text-center">
+                <div class="display-4"><p>Select a Playback Device</p></div>
+              </div>
+              {% for entry in pa["Devices"]["devices"] %}
+                <div class="col-12">
+                    <h2>{{ entry['name'] }}</h2>
+                    <a class="btn btn-dark" href="{{'/playback/' + pa['Room Code'] + '/' + entry['id']}}">Select</a>
+                </div>
+                
+              {% endfor %}  
+            </div>
+    </body>
+</html>

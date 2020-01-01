@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, redirect, g, render_template
+from flask import Flask, request, redirect, g, render_template, jsonify
 import requests
 from urllib.parse import quote
 from credentials import CLIENT_ID, CLIENT_SECRET
@@ -169,7 +169,14 @@ def callback():
         "Access Token" : access_token,
         "Playlist ID" : created_playlist_data["id"]
     }
-    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
+
+    playback_args = {
+        "Room Code" : rc,
+        "Devices" : get_devices(rc)
+    }
+    return render_template("playback.html", pa=playback_args)
+
+    # return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 @app.route("/join")
 def join():
@@ -201,7 +208,11 @@ def find_room():
 @app.route("/add/<rc>/<uri>")
 def add_song(rc, uri):
     add(rc, uri)
-    
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
+
+@app.route("/playback/<rc>/<id>")
+def playback(rc, id):
+    # set up device
     return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 
