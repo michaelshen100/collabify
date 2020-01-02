@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Room</title>
-        <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/styles.css')}}">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
     </head>
@@ -21,6 +21,16 @@
                             </div>
                         </div>
                     </form>
+                    {%if ra['Playlist Items']['items'] == [] %}
+                        <img class='music'src="{{ url_for('static', filename ='music.svg')}}" />    
+                    {%else%}
+                        <img src="{{ ra['Playlist Items']['items'][0]['track']['album']['images'][1]['url'] }}" />
+                    {% endif %}
+                    <div>
+
+                    <a href='#'><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/play.svg')}}"></a>
+                    <a href='#'><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/pause.svg')}}"></a>
+                    </div>
                     <div class="display-4 mb-5">Current Queue</div>
                     {% for entry in ra['Playlist Items']['items'] %}
                     <div class="row">

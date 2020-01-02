@@ -8,3 +8,13 @@ body, html{
 body {
     text-align: center;
 }
+
+.icon {
+    width: 100px;
+    height: 100px;
+}
+
+.music {
+    width: 200px;
+    height: 200px;
+}
