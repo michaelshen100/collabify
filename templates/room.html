@@ -4,12 +4,13 @@
         <title>Room</title>
         <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
     </head>
     <body>
         <div class="container h-100">
                   <div class="col-12 text-center">
-                    <p></p>
-                    <div class="display-5"><p>Room Code: {{ ra['Room Code'] }}</p></div>
+                    <p class="display-3">Start Collabing</p>
+                    <p class="display-5">Room Code: {{ ra['Room Code'] }}</p>
                     <form action="{{ '/search/' + ra['Room Code'] }}" method="post">
                         <div class="form-group">
                             <div class="input-group mb-3">
@@ -20,13 +21,13 @@
                             </div>
                         </div>
                     </form>
-                    <div class="display-4">Current Queue</div>
+                    <div class="display-4 mb-5">Current Queue</div>
                     {% for entry in ra['Playlist Items']['items'] %}
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-4">
                             <img class="img-fluid" src="{{ entry['track']['album']['images'][0]['url'] }}"/>
                         </div>
-                        <div class="col-10 text-left">
+                        <div class="col-8 text-left">
                             <h2>{{ entry['track']['name'] }}</h2>
                             <p>
                             {% for artist in entry['track']['artists'] %}

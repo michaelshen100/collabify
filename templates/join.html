@@ -4,23 +4,28 @@
         <title>Join a Room</title>
         <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
     </head>
     <body>
         <div class="container h-100">
                 <div class="row h-100 justify-content-center align-items-center">
-                  <div class="col-3 text-center">
-                    <div class="display-4"><p>Find Room</p></div>
-                    <form action="/find_room" method="post">
-                      <div class="form-group">
-                          <div class="input-group mb-3">
-                              <input type="text" class="form-control" placeholder="Enter Room Code" aria-describedby="button-addon2" name="rc" required/>
-                              <div class="input-group-append">
-                                  <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-                              </div>
-                          </div>
-                      </div>
-                  </form>
-                  </div>  
-                </div>
+                    <div>
+
+                        <p class="display-4">Find Room</p>
+                        <form action="/find_room" method="post">
+                            <div class="form-group">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Enter Room Code" aria-describedby="button-addon2" name="rc" required/>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+
+            </div>
+        </div>
     </body>
 </html>

@@ -4,6 +4,7 @@
         <title>Search Results</title>
         <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
     </head>
     <body>
         <div class="container">
@@ -22,10 +23,10 @@
             </div>
             {% for entry in sd["Search Results"]["tracks"]["items"] %}
             <div class="row">
-                <div class="col-2">
-                    <img class="img-fluid" src="{{ entry['album']['images'][0]['url'] }}"/>
+                <div class="col-4">
+                    <img class="img-fluid" src="{{ entry['album']['images'][1]['url'] }}"/>
                 </div>
-                <div class="col-10">
+                <div class="col-8">
                     <h2>{{ entry['name'] }}</h2>
                     <p>
                     {% for artist in entry['artists'] %}

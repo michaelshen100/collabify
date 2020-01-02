@@ -1,0 +1,27 @@
+@media (min-width: 576px) {
+    .btn{
+        
+        font-size: 3rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .btn{
+        
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .btn{
+        
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .btn{
+        
+        font-size: 1rem;
+    }
+}
