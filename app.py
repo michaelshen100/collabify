@@ -39,12 +39,14 @@ auth_query_parameters = {
 
 room_directory = dict()
 
-def play(rc):
-    play_url = "https://api.spotify.com/v1/me/player/play"
-    play_auth_header = {"Authorization": f"Bearer {room_directory[rc]['Access Token']}"}
-    play_response = requests.put(play_url, headers=play_auth_header)
-    play_data = json.loads(play_response.text)
-    return play_data
+def play_song(rc):
+    #play_url = "https://api.spotify.com/v1/me/player/play"
+    play_url = "https://api.spotify.com/v1/me/player/play?device_id=" + room_directory[rc]["Playback Device"]
+    play_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
+    play_response = requests.put(play_url, headers=play_auth_header, json={"context_uri":"spotify:playlist:" + room_directory[rc]["Playlist ID"]})
+    # play_data = json.loads(play_response.text)
+    # return play_data
+    return
 
 def pause(rc):
     pause_url = "https://api.spotify.com/v1/me/player/pause"
@@ -216,8 +218,14 @@ def add_song(rc, uri):
 @app.route("/playback/<rc>/<id>")
 def playback(rc, id):
     # set up device
+    room_directory[rc]["Playback Device"] = id
     return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
+@app.route("/play/<rc>")
+def play(rc):
+    #return jsonify(room_directory[rc]["Playlist ID"])
+    play_song(rc)
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 if __name__ == "__main__":
     app.run(debug=True)
