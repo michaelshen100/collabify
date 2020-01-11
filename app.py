@@ -20,7 +20,7 @@ API_VERSION = "v1"
 SPOTIFY_API_URL = f"{SPOTIFY_API_BASE_URL}/{API_VERSION}"
 
 # Server-side Parameters
-CLIENT_SIDE_URL = "http://127.0.0.1"
+CLIENT_SIDE_URL = "http://collabify-xyz.herokuapp.com"
 PORT = 5000
 REDIRECT_URI = "http://collabify-xyz.herokuapp.com/callback/q"
 SCOPE = "playlist-modify-public playlist-modify-private user-modify-playback-state user-read-playback-state user-read-currently-playing"
