@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, redirect, g, render_template, jsonify
+from flask import Flask, request, redirect, g, render_template, jsonify, session
 import requests
 from urllib.parse import quote
 from credentials import CLIENT_ID, CLIENT_SECRET
@@ -11,6 +11,7 @@ import uuid
 
 app = Flask(__name__)
 
+app.secret_key = 'bobs'
 # Spotify URLS
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
@@ -51,15 +52,15 @@ def play(rc):
     play_url = "https://api.spotify.com/v1/me/player/play"
     play_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
     play_response = requests.put(play_url, headers=play_auth_header)
-    play_data = json.loads(play_response.text)
-    return play_data
+    #play_data = json.loads(play_response.text)
+    #return play_data
 
 def pause(rc):
     pause_url = "https://api.spotify.com/v1/me/player/pause"
     pause_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
     pause_response = requests.put(pause_url, headers=pause_auth_header)
-    pause_data = json.loads(pause_response.text)
-    return pause_data
+    #pause_data = json.loads(pause_response.text)
+    #return pause_data
 
 
 # Function to display the queue (Collabify Playlist)
@@ -70,6 +71,7 @@ def display_playlist(rc):
     display_data = json.loads(display_response.text)
     return display_data
 
+### MAYBE DIFFERENT STILL ###
 # Function to start playback on a given device
 def select_device(rc, device_id):
     room_directory[rc]["Device ID"] = device_id
@@ -96,16 +98,18 @@ def room_code():
     id = uuid.uuid4()
     return str(id)[24:29]
 
+### HAS CHANGES ALREADY APPLIED ###
 # Function to add song to a playlist given the playlist's ID, the song's URI, and the authorization token
 def add(rc, song_uri):
     global count
-    playlist_ID = room_directory[rc]["Playlist ID"]
-    add_song_header = {"Authorization" : "Bearer {}".format(room_directory[rc]["Access Token"]),
-                        "Content-Type"  :  "application/json"}
-    add_url = "https://api.spotify.com/v1/playlists/" + playlist_ID + "/tracks"
-    add_response = requests.post(add_url, headers=add_song_header, json={"uris" : [song_uri]})
-    add_data = json.loads(add_response.text)
-    count += 1
+    if song_uri != session['uri']:
+        playlist_ID = room_directory[rc]["Playlist ID"]
+        add_song_header = {"Authorization" : "Bearer {}".format(room_directory[rc]["Access Token"]),
+                            "Content-Type"  :  "application/json"}
+        add_url = "https://api.spotify.com/v1/playlists/" + playlist_ID + "/tracks"
+        add_response = requests.post(add_url, headers=add_song_header, json={"uris" : [song_uri]})
+        add_data = json.loads(add_response.text)
+        count += 1
 
 # Function to search for songs given a query; NOTE: query for endpoint needs to be passed in formatted form --> convert from plain-text recieved from front-end
 def search_fr(query, search_header):
@@ -123,6 +127,7 @@ def room_args(rc, display_playlist):
 
 @app.route("/")
 def index():
+    session['uri'] = ''
     return render_template("index.html")
 
 @app.route("/authenticate")
@@ -225,6 +230,7 @@ def find_room():
 @app.route("/add/<rc>/<uri>")
 def add_song(rc, uri):
     add(rc, uri)
+    session['uri'] = uri
     if(count == 1):
         start_play(rc)
     return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
@@ -233,6 +239,18 @@ def add_song(rc, uri):
 def playback(rc, id):
     # set up device
     select_device(rc, id)
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
+
+@app.route("/play/<rc>")
+def play_song(rc):
+    #return jsonify(room_directory[rc]["Playlist ID"])
+    play(rc)
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
+
+@app.route("/pause/<rc>")
+def pause_song(rc):
+    #return jsonify(room_directory[rc]["Playlist ID"])
+    pause(rc)
     return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 

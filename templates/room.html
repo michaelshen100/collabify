@@ -29,7 +29,7 @@
                 <div>
 
                 <a href="{{ '/play/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/play.svg')}}"></a>
-                <a href='#'><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/pause.svg')}}"></a>
+                <a href="{{ '/pause/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/pause.svg')}}"></a>
                 </div>
                 <div class="display-4 mb-5">Current Queue</div>
                 {% for entry in ra['Playlist Items']['items'] %}
