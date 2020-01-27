@@ -40,6 +40,52 @@ auth_query_parameters = {
 room_directory = dict()
 count = 0
 
+# Returns a boolean indicating if the active player is paused
+def is_paused(rc):
+    is_pause_url = "https://api.spotify.com/v1/me/player"
+    is_pause_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
+    is_pause_response = requests.get(is_pause_url, headers=is_pause_auth_header)
+    is_pause_data = json.loads(is_pause_response.text)
+    return not is_pause_data["is_playing"]
+
+# Returns a JSON file containing information about the Collabify playlist
+def get_playlist_data(rc):
+    get_playlist_url = "https://api.spotify.com/v1/playlists/{}".format(room_directory[rc]["Playlist ID"])
+    get_playlist_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
+    get_playlist_response = requests.get(get_playlist_url, headers=get_playlist_auth_header)
+    get_playlist_data = json.loads(get_playlist_response.text)
+    return get_playlist_data
+
+# Returns a JSON file containing information about the active player
+def get_player_data(rc):
+    get_player_url = "https://api.spotify.com/v1/me/player"
+    get_player_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
+    get_player_response = requests.get(get_player_url, headers=get_player_auth_header)
+    get_player_data = json.loads(get_player_response.text)
+    return get_player_data
+
+# Returns the amount of tracks in the playlist
+def get_length(rc):
+    jsontemp = get_playlist_data(rc)
+    return jsontemp["tracks"]["total"]
+
+# Returns a Context Object indicating the current context of the active player
+def get_context(rc):
+    jsontemp = get_player_data(rc)
+    #return jsontemp["context"]["uri"]
+    return jsontemp["context"]
+
+# Returns True if the current context is None; ie. the app has reached the end of the playlist and is playing on autoplay
+def compare_context(rc):
+    return get_context(rc) == None
+
+# Starts playback at the last track of the playlist if the playlist had previously reached an end
+def start_play_offset(rc):
+    play_offset_url = "https://api.spotify.com/v1/me/player/play"
+    play_offset_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
+    play_offset_response = requests.put(play_offset_url, headers=play_offset_auth_header, json={"context_uri" : room_directory[rc]["URI"], "offset" : {"position" : count-1}})
+
+# Starts playback after the first song has been added to the queue
 def start_play(rc):
     shuffle_url = "https://api.spotify.com/v1/me/player/shuffle?state=false"
     shuffle_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
@@ -47,7 +93,8 @@ def start_play(rc):
     play_select_url = "https://api.spotify.com/v1/me/player/play"
     play_select_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
     play_select_response = requests.put(play_select_url, headers=play_select_auth_header, json={"context_uri" : room_directory[rc]["URI"]})
-    
+
+# Starts playback when the "Play" icon is selected   
 def play(rc):
     play_url = "https://api.spotify.com/v1/me/player/play"
     play_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
@@ -55,6 +102,7 @@ def play(rc):
     #play_data = json.loads(play_response.text)
     #return play_data
 
+# Stops playback when the "Pause" icon is
 def pause(rc):
     pause_url = "https://api.spotify.com/v1/me/player/pause"
     pause_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
@@ -71,7 +119,6 @@ def display_playlist(rc):
     display_data = json.loads(display_response.text)
     return display_data
 
-### MAYBE DIFFERENT STILL ###
 # Function to start playback on a given device
 def select_device(rc, device_id):
     room_directory[rc]["Device ID"] = device_id
@@ -79,12 +126,7 @@ def select_device(rc, device_id):
     device_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
     device_response = requests.put(device_url, headers=device_auth_header, json={"device_ids" : [device_id], "play" : False})
     #device_data = json.loads(device_response.text)
-    #troubleshoot_url = "https://api.spotify.com/v1/me/player"
-    #troubleshoot_auth_header = {"Authorization": "Bearer {}".format(room_directory[rc]["Access Token"])}
-    #troubleshoot_response = requests.get(troubleshoot_url, headers=troubleshoot_auth_header)
-    #print(troubleshoot_response.text)
-
-
+    
 # Function to retrieve a list of the user's available devices
 def get_devices(rc):
     devices_url = "https://api.spotify.com/v1/me/player/devices"
@@ -98,7 +140,6 @@ def room_code():
     id = uuid.uuid4()
     return str(id)[24:29]
 
-### HAS CHANGES ALREADY APPLIED ###
 # Function to add song to a playlist given the playlist's ID, the song's URI, and the authorization token
 def add(rc, song_uri):
     global count
@@ -233,6 +274,8 @@ def add_song(rc, uri):
     session['uri'] = uri
     if(count == 1):
         start_play(rc)
+    elif((is_paused(rc) or compare_context(rc)) and count == get_length(rc)): # Checks if queue has been finished and the current playback is either paused or autoplaying radio content
+        start_play_offset(rc)
     return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 @app.route("/playback/<rc>/<id>")
