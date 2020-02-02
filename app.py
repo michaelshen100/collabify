@@ -4,6 +4,7 @@ import requests
 from urllib.parse import quote
 from credentials import CLIENT_ID, CLIENT_SECRET
 import uuid
+from flask_sqlalchemy import sqlalchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Room
