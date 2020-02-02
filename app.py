@@ -93,7 +93,7 @@ def start_play_offset(rc):
     currentRoom = session.query(Room).filter(Room.r_c == rc).one()
     play_offset_url = "https://api.spotify.com/v1/me/player/play"
     play_offset_auth_header = {"Authorization": "Bearer {}".format(currentRoom.accesst)}
-    play_offset_response = requests.put(play_offset_url, headers=play_offset_auth_header, json={"context_uri" : currentRoom.playlistURI, "offset" : {"position" : count-1}})
+    play_offset_response = requests.put(play_offset_url, headers=play_offset_auth_header, json={"context_uri" : currentRoom.playlistURI, "offset" : {"position" : currentRoom.count-1}})
 
 # Starts playback after the first song has been added to the queue
 def start_play(rc):
