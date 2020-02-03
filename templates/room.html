@@ -27,9 +27,10 @@
                     <img src="{{ ra['Playlist Items']['items'][0]['track']['album']['images'][1]['url'] }}" />
                 {% endif %}
                 <div>
-
+                <a href="{{ '/rewind/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/rewind.svg')}}"></a>
                 <a href="{{ '/play/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/play.svg')}}"></a>
                 <a href="{{ '/pause/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/pause.svg')}}"></a>
+                <a href="{{ '/forward/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/fast-forward.svg')}}"></a>
                 </div>
                 <div class="display-4 mb-5">Current Queue</div>
                 {% for entry in ra['Playlist Items']['items'] %}

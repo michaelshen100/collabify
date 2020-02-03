@@ -46,6 +46,20 @@ auth_query_parameters = {
     "client_id": CLIENT_ID
 }
 
+# Skip the user's playback forwards to the next track (ff = fast forward)
+def ff(rc):
+    currentRoom = session.query(Room).filter(Room.r_c == rc).one()
+    ff_url = "https://api.spotify.com/v1/me/player/next"
+    ff_auth_header = {"Authorization": "Bearer {}".format(currentRoom.accesst)}
+    ff_response = requests.post(ff_url, headers=ff_auth_header)
+
+# Skip the user's playback backwards to the previous track (rw = rewind)
+def rw(rc):
+    currentRoom = session.query(Room).filter(Room.r_c == rc).one()
+    rw_url = "https://api.spotify.com/v1/me/player/previous"
+    rw_auth_header = {"Authorization": "Bearer {}".format(currentRoom.accesst)}
+    rw_response = requests.post(rw_url, headers=rw_auth_header)
+
 # Returns a boolean indicating if the active player is paused
 def is_paused(rc):
     currentRoom = session.query(Room).filter(Room.r_c == rc).one()
@@ -319,6 +333,15 @@ def pause_song(rc):
     pause(rc)
     return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
+@app.route("/forward/<rc>")
+def fast_forward(rc):
+    ff(rc)
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
+
+@app.route("/rewind/<rc>")
+def rewind(rc):
+    rw(rc)
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 if __name__ == "__main__":
     app.run(debug=True)
