@@ -18,3 +18,8 @@ body {
     width: 200px;
     height: 200px;
 }
+
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
