@@ -46,6 +46,35 @@ auth_query_parameters = {
     "client_id": CLIENT_ID
 }
 
+# Removes a room's entry in the database when a user is finished with their session
+def end_room(rc):
+    currentRoom = session.query(Room).filter(Room.r_c == rc).one()
+    session.delete(currentRoom)
+    session.commit()
+
+# Delete a song from the playlist/queue given a Spotify URI and the position in the playlist
+def delete(rc, uri, pos):
+    currentRoom = session.query(Room).filter(Room.r_c == rc).one()
+    playlist_ID = currentRoom.playlistID
+    delete_url = "https://api.spotify.com/v1/playlists/" + playlist_ID + "/tracks"
+    delete_auth_header = {"Authorization" : "Bearer {}".format(currentRoom.accesst),
+                            "Content-Type"  :  "application/json"}
+    delete_response = requests.delete(delete_url, headers=delete_auth_header, json={ "tracks": [{ "uri": uri, "positions": [pos] }] })
+
+# Skip the user's playback forwards to the next track (ff = fast forward)
+def ff(rc):
+    currentRoom = session.query(Room).filter(Room.r_c == rc).one()
+    ff_url = "https://api.spotify.com/v1/me/player/next"
+    ff_auth_header = {"Authorization": "Bearer {}".format(currentRoom.accesst)}
+    ff_response = requests.post(ff_url, headers=ff_auth_header)
+
+# Skip the user's playback backwards to the previous track (rw = rewind)
+def rw(rc):
+    currentRoom = session.query(Room).filter(Room.r_c == rc).one()
+    rw_url = "https://api.spotify.com/v1/me/player/previous"
+    rw_auth_header = {"Authorization": "Bearer {}".format(currentRoom.accesst)}
+    rw_response = requests.post(rw_url, headers=rw_auth_header)
+
 # Returns a boolean indicating if the active player is paused
 def is_paused(rc):
     currentRoom = session.query(Room).filter(Room.r_c == rc).one()
@@ -319,6 +348,15 @@ def pause_song(rc):
     pause(rc)
     return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
+@app.route("/forward/<rc>")
+def fast_forward(rc):
+    ff(rc)
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
+
+@app.route("/rewind/<rc>")
+def rewind(rc):
+    rw(rc)
+    return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
 if __name__ == "__main__":
     app.run(debug=False)

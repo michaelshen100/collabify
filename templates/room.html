@@ -7,53 +7,56 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"> 
     </head>
     <body>
-        <div class="container h-100">
-            <div class="col-12 text-center">
-                <p class="display-3">Start Collabing</p>
-                <p class="display-5">Room Code: {{ ra['Room Code'] }}</p>
-                <form action="{{ '/search/' + ra['Room Code'] }}" method="post">
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Enter Song Name" aria-describedby="button-addon2" name="search" required/>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+        <div id="page-container">
+            <div class="container h-100" id="content-wrap">
+                <div class="col-12 text-center">
+                    <p class="display-3">Start Collabing</p>
+                    <p class="display-5">Room Code: {{ ra['Room Code'] }}</p>
+                    <form action="{{ '/search/' + ra['Room Code'] }}" method="post">
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Enter Song Name" aria-describedby="button-addon2" name="search" required/>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
+                                </div>
                             </div>
                         </div>
+                    </form>
+                    {%if ra['Playlist Items']['items'] == [] %}
+                        <img class='music'src="{{ url_for('static', filename ='music.svg')}}" />    
+                    {%else%}
+                        <img src="{{ ra['Playlist Items']['items'][0]['track']['album']['images'][1]['url'] }}" />
+                    {% endif %}
+                    <div>
+                    <a href="{{ '/rewind/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/rewind.svg')}}"></a>
+                    <a href="{{ '/play/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/play.svg')}}"></a>
+                    <a href="{{ '/pause/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/pause.svg')}}"></a>
+                    <a href="{{ '/forward/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/fast-forward.svg')}}"></a>
                     </div>
-                </form>
-                {%if ra['Playlist Items']['items'] == [] %}
-                    <img class='music'src="{{ url_for('static', filename ='music.svg')}}" />    
-                {%else%}
-                    <img src="{{ ra['Playlist Items']['items'][0]['track']['album']['images'][1]['url'] }}" />
-                {% endif %}
-                <div>
-
-                <a href="{{ '/play/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/play.svg')}}"></a>
-                <a href="{{ '/pause/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/pause.svg')}}"></a>
-                </div>
-                <div class="display-4 mb-5">Current Queue</div>
-                {% for entry in ra['Playlist Items']['items'] %}
-                <div class="row">
-                    <div class="col-4">
-                        <img class="img-fluid" src="{{ entry['track']['album']['images'][0]['url'] }}"/>
+                    <div class="display-4 mb-5">Current Queue</div>
+                    {% for entry in ra['Playlist Items']['items'] %}
+                    <div class="row">
+                        <div class="col-4">
+                            <img class="img-fluid" src="{{ entry['track']['album']['images'][0]['url'] }}"/>
+                        </div>
+                        <div class="col-8 text-left">
+                            <h2>{{ entry['track']['name'] }}</h2>
+                            <p>
+                            {% for artist in entry['track']['artists'] %}
+                            {{ artist['name'] }}
+                            {% endfor %}
+                            - {{ entry['track']['album']['name']}}
+                            </p>
+                            <h3></h3>
+                        </div>
                     </div>
-                    <div class="col-8 text-left">
-                        <h2>{{ entry['track']['name'] }}</h2>
-                        <p>
-                        {% for artist in entry['track']['artists'] %}
-                        {{ artist['name'] }}
-                        {% endfor %}
-                        - {{ entry['track']['album']['name']}}
-                        </p>
-                        <h3></h3>
-                    </div>
-                </div>
-                <p></p>
-                {% endfor %}
-            </div>  
-        </div>
-        <div class="card-footer text-muted text-center">
-            Powered by <strong>Spotify</strong>
+                    <p></p>
+                    {% endfor %}
+                </div>  
+            </div>
+            <div class="card-footer text-muted text-center" id="footer">
+                Powered by <strong>Spotify</strong>
+            </div>
         </div>
     </body>
 </html>
