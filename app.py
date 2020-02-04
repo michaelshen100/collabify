@@ -46,6 +46,12 @@ auth_query_parameters = {
     "client_id": CLIENT_ID
 }
 
+# Removes a room's entry in the database when a user is finished with their session
+def end_room(rc):
+    currentRoom = session.query(Room).filter(Room.r_c == rc).one()
+    session.delete(currentRoom)
+    session.commit()
+
 # Delete a song from the playlist/queue given a Spotify URI and the position in the playlist
 def delete(rc, uri, pos):
     currentRoom = session.query(Room).filter(Room.r_c == rc).one()
