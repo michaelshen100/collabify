@@ -4,10 +4,11 @@
         <title>Search Results</title>
         <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Oxygen|Righteous&display=swap" rel="stylesheet"> 
     </head>
     <body>
-        <div class="container">
+        <div style="font-family: 'Oxygen', sans-serif;" class="container">
             <p></p>
             <div class="col-12 text-center">
                 <form action="{{ '/search/' + sd['Room Code'] }}" method="post">
@@ -40,7 +41,7 @@
             </div>
             <p></p>
             {% endfor %}
-            <div class="card-footer text-muted text-center">
+            <div style="font-family: 'Oxygen', sans-serif;" class="card-footer text-muted text-center">
                 Powered by <strong>Spotify</strong>
             </div>
     </body>

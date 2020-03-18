@@ -4,10 +4,11 @@
         <title>Room</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/styles.css')}}">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Oxygen|Righteous&display=swap" rel="stylesheet">  
     </head>
     <body>
-        <div id="page-container">
+        <div style="font-family: 'Oxygen', sans-serif;" id="page-container">
             <div class="container h-100" id="content-wrap">
                 <div class="col-12 text-center">
                     <p class="display-3">Start Collabing</p>
@@ -54,9 +55,9 @@
                     {% endfor %}
                 </div>  
             </div>
-            <div class="card-footer text-muted text-center" id="footer">
-                Powered by <strong>Spotify</strong>
-            </div>
+        </div>
+        <div style="font-family: 'Oxygen', sans-serif;" class="card-footer text-muted text-center" id="footer">
+            Powered by <strong>Spotify</strong>
         </div>
     </body>
 </html>
