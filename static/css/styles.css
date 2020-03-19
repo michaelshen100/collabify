@@ -26,23 +26,23 @@ body {
 
 @keyframes bgcolor {
     0% {
-        background-color: #45a3e5
+        background-color: #E65F5C
     }
 
-    30% {
-        background-color: #66bf39
+    25% {
+        background-color: #FCB97D
     }
 
-    60% {
-        background-color: #eb670f
+    50% {
+        background-color: #D89A9E
     }
 
-    90% {
-        background-color: #f35
+    75% {
+        background-color: #A9DDD6
     }
 
     100% {
-        background-color: #864cbf
+        background-color: #87BEAD
     }
 }
 
