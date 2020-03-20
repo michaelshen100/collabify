@@ -7,12 +7,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://fonts.googleapis.com/css?family=Oxygen|Righteous&display=swap" rel="stylesheet">  
     </head>
-    <body>
+    <body style="background-color: #87BEAD">
         <div style="font-family: 'Oxygen', sans-serif;" id="page-container">
             <div class="container h-100" id="content-wrap">
                 <div class="col-12 text-center">
-                    <p class="display-3">Start Collabing</p>
-                    <p class="display-5">Room Code: {{ ra['Room Code'] }}</p>
+                    <h3>Room Code: {{ ra['Room Code'] }}</h3>
                     <form action="{{ '/search/' + ra['Room Code'] }}" method="post">
                         <div class="form-group">
                             <div class="input-group mb-3">
@@ -24,23 +23,35 @@
                         </div>
                     </form>
                     {%if ra['Playlist Items']['items'] == [] %}
-                        <img class='music'src="{{ url_for('static', filename ='music.svg')}}" />    
+                        <!-- <img class='music'src="{{ url_for('static', filename ='music.svg')}}" />     -->
                     {%else%}
                         <img src="{{ ra['Playlist Items']['items'][0]['track']['album']['images'][1]['url'] }}" />
+                        <div class="display-4">{{ ra['Playlist Items']['items'][0]['track']['name'] }}</div>
+                        <h3>
+                        {% for artist in ra['Playlist Items']['items'][0]['track']['artists'] %}
+                        {{ artist['name'] }}
+                        {% endfor %}
+                        - {{ ra['Playlist Items']['items'][0]['track']['album']['name']}}
+                        </h3>
+                        <div>
+                        <!-- <a href="{{ '/rewind/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/rewind.svg')}}"></a>
+                        <a href="{{ '/play/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/play.svg')}}"></a>
+                        <a href="{{ '/pause/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/pause.svg')}}"></a>
+                        <a href="{{ '/forward/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/fast-forward.svg')}}"></a> -->
+                        <p></p>
+                        </div>
                     {% endif %}
-                    <div>
-                    <a href="{{ '/rewind/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/rewind.svg')}}"></a>
-                    <a href="{{ '/play/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/play.svg')}}"></a>
-                    <a href="{{ '/pause/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/pause.svg')}}"></a>
-                    <a href="{{ '/forward/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/fast-forward.svg')}}"></a>
-                    </div>
-                    <div class="display-4 mb-5">Current Queue</div>
+                    <h1>Current Queue</h1>
+                    {% if ra['Playlist Items']['items'][1] == null %}
+                    <h3>Nothing in Queue!</h3>
+                    {%else%}
                     {% for entry in ra['Playlist Items']['items'] %}
+                    {% if entry != ra['Playlist Items']['items'][0] %}
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-2">
                             <img class="img-fluid" src="{{ entry['track']['album']['images'][0]['url'] }}"/>
                         </div>
-                        <div class="col-8 text-left">
+                        <div class="col-10 text-left">
                             <h2>{{ entry['track']['name'] }}</h2>
                             <p>
                             {% for artist in entry['track']['artists'] %}
@@ -52,7 +63,9 @@
                         </div>
                     </div>
                     <p></p>
+                    {% endif %}
                     {% endfor %}
+                    {% endif %}
                 </div>  
             </div>
         </div>

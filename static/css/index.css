@@ -1,30 +1,4 @@
-*{
-    margin: 0;
-    padding: 0;
-}
-body, html{
-    height: 100%;
-}
-body {
-    text-align: center;
-}
-
-.icon {
-    width: 100px;
-    height: 100px;
-}
-
-.music {
-    width: 200px;
-    height: 200px;
-}
-
-#page-container {
-    position: relative;
-    min-height: 100vh;
-}
-
-/* @keyframes bgcolor {
+@keyframes bgcolor {
     0% {
         background-color: #E65F5C
     }
@@ -51,4 +25,4 @@ body {
     animation: bgcolor 10s infinite;
     -webkit-animation-direction: alternate;
     animation-direction: alternate;
-} */
+}
