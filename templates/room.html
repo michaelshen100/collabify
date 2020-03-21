@@ -7,15 +7,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://fonts.googleapis.com/css?family=Oxygen|Righteous&display=swap" rel="stylesheet">  
     </head>
-    <body style="background-color: #87BEAD">
+    <body style="background-color: white">
         <div style="font-family: 'Oxygen', sans-serif;" id="page-container">
             <div class="container h-100" id="content-wrap">
                 <div class="col-12 text-center">
-                    <h3>Room Code: {{ ra['Room Code'] }}</h3>
+                    <h4>{{ ra['Room Code'] }}</h4>
                     <form action="{{ '/search/' + ra['Room Code'] }}" method="post">
                         <div class="form-group">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Enter Song Name" aria-describedby="button-addon2" name="search" required/>
+                                <input type="text" class="form-control" placeholder="Search Song Name" aria-describedby="button-addon2" name="search" required/>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Find</button>
                                 </div>
@@ -25,14 +25,28 @@
                     {%if ra['Playlist Items']['items'] == [] %}
                         <!-- <img class='music'src="{{ url_for('static', filename ='music.svg')}}" />     -->
                     {%else%}
-                        <img src="{{ ra['Playlist Items']['items'][0]['track']['album']['images'][1]['url'] }}" />
-                        <div class="display-4">{{ ra['Playlist Items']['items'][0]['track']['name'] }}</div>
-                        <h3>
+                        <!-- <img src="{{ ra['Playlist Items']['items'][0]['track']['album']['images'][1]['url'] }}" />
+                        <p></p>
+                        <h1>{{ ra['Playlist Items']['items'][0]['track']['name'] }}</h1>
+                        <h5 class="text-muted">
                         {% for artist in ra['Playlist Items']['items'][0]['track']['artists'] %}
                         {{ artist['name'] }}
                         {% endfor %}
                         - {{ ra['Playlist Items']['items'][0]['track']['album']['name']}}
-                        </h3>
+                        </h5> -->
+                        <div class="d-flex justify-content-center">
+                        <div class="card" style="width: 22rem;">
+                            <img src="{{ ra['Playlist Items']['items'][0]['track']['album']['images'][1]['url'] }}" class="card-img-top">
+                            <div class="card-body">
+                                <h2>{{ ra['Playlist Items']['items'][0]['track']['name'] }}</h1>
+                                <h5 class="text-muted">
+                                {% for artist in ra['Playlist Items']['items'][0]['track']['artists'] %}
+                                {{ artist['name'] }}
+                                {% endfor %}
+                                </h5>
+                            </div>
+                          </div>
+                        </div>
                         <div>
                         <!-- <a href="{{ '/rewind/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'skip-playback-icons/rewind.svg')}}"></a>
                         <a href="{{ '/play/' + ra['Room Code'] }}"><img class='icon' src="{{ url_for('static', filename = 'play-pause-icons/play.svg')}}"></a>
@@ -42,8 +56,9 @@
                         </div>
                     {% endif %}
                     <h1>Current Queue</h1>
+                    <p></p>
                     {% if ra['Playlist Items']['items'][1] == null %}
-                    <h3>Nothing in Queue!</h3>
+                    <h5 class="text-muted">Nothing in Queue!</h3>
                     {%else%}
                     {% for entry in ra['Playlist Items']['items'] %}
                     {% if entry != ra['Playlist Items']['items'][0] %}
@@ -52,8 +67,8 @@
                             <img class="img-fluid" src="{{ entry['track']['album']['images'][0]['url'] }}"/>
                         </div>
                         <div class="col-10 text-left">
-                            <h2>{{ entry['track']['name'] }}</h2>
-                            <p>
+                            <h3>{{ entry['track']['name'] }}</h3>
+                            <p class="text-muted">
                             {% for artist in entry['track']['artists'] %}
                             {{ artist['name'] }}
                             {% endfor %}
@@ -67,9 +82,9 @@
                     {% endfor %}
                     {% endif %}
                 </div>  
+                <a style="font-family: 'Oxygen', sans-serif;" class="btn btn-light btn-lg btn-block" href="{{ '/endroom/' + ra['Room Code'] }}">End Room</a> 
             </div>
         </div>
-        <a style="font-family: 'Oxygen', sans-serif;" class="btn btn-light btn-lg btn-block" href="{{ '/endroom/' + ra['Room Code'] }}">End Room</a> 
         <div style="font-family: 'Oxygen', sans-serif;" class="card-footer text-muted text-center" id="footer">
             Powered by <strong>Spotify</strong>
         </div>
