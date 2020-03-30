@@ -358,5 +358,10 @@ def rewind(rc):
     rw(rc)
     return render_template("room.html", ra=room_args(rc,display_playlist(rc)))
 
+@app.route("/endroom/<rc>")
+def endroom(rc):
+    end_room(rc)
+    return render_template("index.html")
+
 if __name__ == "__main__":
     app.run(debug=False)
